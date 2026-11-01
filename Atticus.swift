@@ -875,7 +875,12 @@ func callJS(_ web: WKWebView?, _ fn: String, _ args: [Any]) {
 func loadPage(_ web: WKWebView, _ name: String) {
     let html = (try? String(contentsOfFile: dir + "/ui/" + name, encoding: .utf8)) ?? "missing " + name
     let orbs = (try? String(contentsOfFile: dir + "/ui/orbs.js", encoding: .utf8)) ?? ""
-    web.loadHTMLString(html.replacingOccurrences(of: "/*ORBS*/", with: orbs), baseURL: nil)
+    let i18n = (try? String(contentsOfFile: dir + "/ui/i18n.js", encoding: .utf8)) ?? ""
+    let page = html
+        .replacingOccurrences(of: "<script src=\"i18n.js\" defer></script>", with: "<script>\(i18n)</script>")
+        .replacingOccurrences(of: "<script src=\"i18n.js\"></script>", with: "<script>\(i18n)</script>")
+        .replacingOccurrences(of: "/*ORBS*/", with: orbs)
+    web.loadHTMLString(page, baseURL: nil)
 }
 
 // The screen under the mouse, else the main one.
