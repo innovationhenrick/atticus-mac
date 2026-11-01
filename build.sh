@@ -34,10 +34,10 @@ cat > "$APP/Contents/Info.plist" <<P
 <key>CFBundleIconFile</key><string>AppIcon</string>
 <key>AtticusSource</key><string>$(pwd)</string>
 <key>LSUIElement</key><true/>
-<key>NSMicrophoneUsageDescription</key><string>Atticus listens when you use its shortcut or microphone button.</string>
-<key>NSAppleEventsUsageDescription</key><string>Atticus controls apps like Finder, Chrome and Music when you ask it to.</string>
-<key>NSCalendarsFullAccessUsageDescription</key><string>Atticus reads your calendar, adds events you request, and asks before moving or deleting existing events. Calendar details are sent to your chosen AI model.</string>
-<key>NSSpeechRecognitionUsageDescription</key><string>Atticus turns your words into text on this Mac.</string>
+<key>NSMicrophoneUsageDescription</key><string>O Atticus ouve quando você usa o atalho ou o botão do microfone.</string>
+<key>NSAppleEventsUsageDescription</key><string>O Atticus controla apps como Finder, Chrome e Música quando você pede.</string>
+<key>NSCalendarsFullAccessUsageDescription</key><string>O Atticus lê seu calendário, adiciona eventos pedidos e pergunta antes de mover ou excluir eventos existentes. Os detalhes do calendário são enviados ao modelo de IA escolhido.</string>
+<key>NSSpeechRecognitionUsageDescription</key><string>O Atticus transforma sua voz em texto neste Mac.</string>
 </dict></plist>
 P
 mv "$STAGE/Atticus" "$APP/Contents/MacOS/Atticus"

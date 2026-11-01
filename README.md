@@ -14,8 +14,10 @@
 ## Quick install
 
 ```
-curl -fsSL https://raw.githubusercontent.com/SaarthurR/atticus-mac/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/innovationhenrick/atticus-mac/pt-br/install.sh | bash
 ```
+
+This personal fork ships a Brazilian Portuguese interface, pt-BR speech defaults and Portuguese AI replies. To install the upstream version instead, set `ATTICUS_REPO=https://github.com/SaarthurR/atticus-mac.git` before running the installer.
 
 Needs macOS 26 and an AI client: Claude Code on a Claude plan, Devin, Pi or a local model. [Full install steps](#install)
 

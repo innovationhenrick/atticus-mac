@@ -4,6 +4,7 @@
 # Downloads the source to ~/.atticus (Atticus updates itself from there), builds the app, opens it.
 set -e
 DIR="${ATTICUS_DIR:-$HOME/.atticus}"
+REPO="${ATTICUS_REPO:-https://github.com/innovationhenrick/atticus-mac.git}"
 echo "Installing Atticus…"
 [ "$(sw_vers -productVersion | cut -d. -f1)" -ge 26 ] || { echo "Atticus needs macOS 26 or later."; exit 1; }
 if ! xcode-select -p >/dev/null 2>&1; then
@@ -15,7 +16,7 @@ fi
 if [ -d "$DIR/.git" ]; then
   git -C "$DIR" pull -q --ff-only || { echo "Could not update $DIR. Delete that folder, then paste the install line again."; exit 1; }
 else
-  git clone -q --depth 1 https://github.com/SaarthurR/atticus-mac.git "$DIR"
+  git clone -q --depth 1 "$REPO" "$DIR"
 fi
 "$DIR/build.sh"
 open "$HOME/Applications/Atticus.app"

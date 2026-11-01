@@ -1,5 +1,5 @@
 <!doctype html>
-<html><head><meta charset="utf-8">
+<html lang="pt-BR"><head><meta charset="utf-8"><script src="i18n.js" defer></script>
 <!-- Atticus settings. Atticus.swift calls st.load({prefs, state}) and gets {do:'set', k, v} and other actions back. -->
 <style>
   :root {
@@ -538,9 +538,9 @@
   let dictations = { words: [], history: [], stats: {} };
   function paintDictation() {
     const d = dictations, n = d.stats;
-    const num = v => (v || 0).toLocaleString(undefined, v >= 1e5 ? { notation: 'compact', maximumFractionDigits: 1 } : {}), mins = n.minutes || 0;
+    const num = v => (v || 0).toLocaleString('pt-BR', v >= 1e5 ? { notation: 'compact', maximumFractionDigits: 1 } : {}), mins = n.minutes || 0;
     $('dstoday').textContent = num(n.today); $('dsall').textContent = num(n.words); $('dssessions').textContent = num(n.sessions);
-    $('dssaved').textContent = mins < 60 ? mins : (mins / 60).toLocaleString(undefined, { maximumFractionDigits: 1 }); $('dssavedunit').textContent = mins < 60 ? 'minutes' : 'hours';
+    $('dssaved').textContent = mins < 60 ? mins : (mins / 60).toLocaleString('pt-BR', { maximumFractionDigits: 1 }); $('dssavedunit').textContent = mins < 60 ? 'minutes' : 'hours';
     $('dictationwords').replaceChildren();
     for (const word of d.words) {
       const row = document.createElement('form'); row.className = 'row';
@@ -560,7 +560,7 @@
       const row = document.createElement('div'); row.className = 'row hist'; row.setAttribute('role', 'listitem');
       const text = document.createElement('div'); text.className = 't';
       const meta = document.createElement('small');
-      meta.textContent = `${new Date(item.timestamp * 1000).toLocaleString(undefined, {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'})} · ${item.app}`;
+      meta.textContent = `${new Date(item.timestamp * 1000).toLocaleString('pt-BR', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'})} · ${item.app}`;
       const final = document.createElement('span'); final.textContent = item.text;
       text.append(meta, final);
       if (item.raw) { const raw = document.createElement('details'), title = document.createElement('summary'), body = document.createElement('span'); title.textContent = 'Raw transcript'; body.textContent = item.raw; raw.append(title, body); text.append(raw); }
@@ -769,7 +769,7 @@
     $('asklist').replaceChildren(...shown.map(a => {
       const row = document.createElement('div'); row.className = 'row'; row.setAttribute('role', 'listitem');
       row.innerHTML = '<div class="t"><b></b><span></span></div>';
-      row.querySelector('b').textContent = a.task; row.querySelector('span').textContent = new Date(a.at.replace(' ', 'T')).toLocaleString(undefined, {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}) + ' · ' + a.reply;
+      row.querySelector('b').textContent = a.task; row.querySelector('span').textContent = new Date(a.at.replace(' ', 'T')).toLocaleString('pt-BR', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}) + ' · ' + a.reply;
       const copy = iconButton('copy', 'Copy answer to ' + a.task, ' copy'); copy.onclick = () => { post({ do: 'copy', text: a.reply }); copied(copy); };
       row.append(copy);
       return row;
@@ -878,7 +878,7 @@
   };
 
   let expectedMeeting=null, savedMeetings=[], currentMeeting=null, meetingMarkdown='', selectedMeeting=0, meetingQueryTimer, detailScroll=0;
-  const meetingDate=s=>new Date(s*1000).toLocaleString(undefined,{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  const meetingDate=s=>new Date(s*1000).toLocaleString('pt-BR',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
   const meetingDuration=s=>s<60?`${Math.floor(s)} sec`:s<3600?`${Math.floor(s/60)} min`:`${Math.floor(s/3600)} hr ${Math.floor(s/60)%60} min`;
   const meetingTime=s=>[Math.floor(s/3600),Math.floor(s/60)%60,Math.floor(s)%60].map(n=>String(n).padStart(2,'0')).join(':');
   const meetingNotice=text=>{ $('meetingmessage').textContent=text; $('meetingmessage').hidden=!text; };
