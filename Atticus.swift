@@ -5179,33 +5179,33 @@ final class MenuBar: NSObject, NSMenuDelegate {
     func menuNeedsUpdate(_ m: NSMenu) {
         m.removeAllItems()
         let keys = Prefs.str("hotkeyLabel")
-        let hint = Prefs.str("input") == "type" ? "Press \(keys) to type" : Prefs.str("talkMode") == "toggle" ? "Press \(keys) to talk · again to send" : "Hold \(keys) and talk"
-        let head = NSMenuItem(title: Prefs.bool("paused") ? "Atticus is paused" : hint, action: nil, keyEquivalent: "")
+        let hint = Prefs.str("input") == "type" ? "Pressione \(keys) para digitar" : Prefs.str("talkMode") == "toggle" ? "Pressione \(keys) para falar · pressione novamente para enviar" : "Mantenha \(keys) pressionado e fale"
+        let head = NSMenuItem(title: Prefs.bool("paused") ? "Atticus está pausado" : hint, action: nil, keyEquivalent: "")
         head.attributedTitle = NSAttributedString(string: head.title, attributes: [.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize, weight: .semibold), .foregroundColor: NSColor.secondaryLabelColor])
         head.isEnabled = false; m.addItem(head)
         let u = NSMenuItem(title: today(), action: nil, keyEquivalent: "")
         u.attributedTitle = NSAttributedString(string: u.title, attributes: [.font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize), .foregroundColor: NSColor.secondaryLabelColor])
         u.isEnabled = false; m.addItem(u)
         m.addItem(.separator())
-        add(m, "Ask Atticus", #selector(ask), "", "waveform")
-        add(m, agentsUI.count > 0 ? "Agents · \(agentsUI.count) running…" : "Agents…", #selector(openAgents), "", "person.2")
-        if agentsUI.hasLive || agentsUI.lingering { add(m, Prefs.bool("agentsHidden") ? "Show Agent Shelf" : "Hide Agent Shelf", #selector(hideAgents), "", Prefs.bool("agentsHidden") ? "eye" : "eye.slash") }
-        add(m, "Dictation History…", #selector(dictationHistory), "", "clock.arrow.circlepath")
+        add(m, "Perguntar ao Atticus", #selector(ask), "", "waveform")
+        add(m, agentsUI.count > 0 ? "Agentes · \(agentsUI.count) em execução…" : "Agentes…", #selector(openAgents), "", "person.2")
+        if agentsUI.hasLive || agentsUI.lingering { add(m, Prefs.bool("agentsHidden") ? "Mostrar painel de agentes" : "Ocultar painel de agentes", #selector(hideAgents), "", Prefs.bool("agentsHidden") ? "eye" : "eye.slash") }
+        add(m, "Histórico de ditados…", #selector(dictationHistory), "", "clock.arrow.circlepath")
         if pasteHotkeyRegistered && (app.lastDictation ?? DictationData.archive.history.first?.text) != nil {
-            add(m, "Paste Last Dictation", #selector(pasteDictation), "v", "doc.on.clipboard"); m.items.last?.keyEquivalentModifierMask = [.control, .command]
+            add(m, "Colar último ditado", #selector(pasteDictation), "v", "doc.on.clipboard"); m.items.last?.keyEquivalentModifierMask = [.control, .command]
         }
-        if Prefs.bool("meeting") { add(m, meeting.running ? "Stop Meeting Copilot" : "Meeting Copilot…", #selector(toggleMeeting), "", meeting.running ? "stop.circle" : "record.circle") }
-        add(m, Prefs.bool("paused") ? "Resume Atticus" : "Pause Atticus", #selector(pause), "", Prefs.bool("paused") ? "play.fill" : "pause.fill")
+        if Prefs.bool("meeting") { add(m, meeting.running ? "Parar copiloto de reuniões" : "Copiloto de reuniões…", #selector(toggleMeeting), "", meeting.running ? "stop.circle" : "record.circle") }
+        add(m, Prefs.bool("paused") ? "Retomar Atticus" : "Pausar Atticus", #selector(pause), "", Prefs.bool("paused") ? "play.fill" : "pause.fill")
         m.addItem(.separator())
-        add(m, "Settings…", #selector(openSettings), ",", "gearshape")
-        let help = NSMenu(title: "Help & Feedback")
-        add(help, "Setup & Permissions…", #selector(openSetup), "", "checkmark.shield")
-        add(help, "Report Feedback…", #selector(reportFeedback), "", "bubble.left")
-        add(help, "Leave a Tip…", #selector(tipJar), "", "heart")
-        if !Prefs.bool("tips") { add(help, "Show Tips Again", #selector(tipsOn), "", "lightbulb") }   // a tip's "Turn off" has no Settings row to undo it
-        add(m, "Help & Feedback", nil, "", "questionmark.circle").submenu = help
+        add(m, "Configurações…", #selector(openSettings), ",", "gearshape")
+        let help = NSMenu(title: "Ajuda e feedback")
+        add(help, "Configuração e permissões…", #selector(openSetup), "", "checkmark.shield")
+        add(help, "Enviar feedback…", #selector(reportFeedback), "", "bubble.left")
+        add(help, "Deixar uma gorjeta…", #selector(tipJar), "", "heart")
+        if !Prefs.bool("tips") { add(help, "Mostrar dicas novamente", #selector(tipsOn), "", "lightbulb") }   // a tip's "Turn off" has no Settings row to undo it
+        add(m, "Ajuda e feedback", nil, "", "questionmark.circle").submenu = help
         m.addItem(.separator())
-        add(m, "Quit Atticus", #selector(quit), "q", "power")
+        add(m, "Sair do Atticus", #selector(quit), "q", "power")
     }
     @discardableResult func add(_ m: NSMenu, _ t: String, _ a: Selector?, _ k: String, _ symbol: String) -> NSMenuItem {
         let i = NSMenuItem(title: t, action: a, keyEquivalent: k); i.target = self
@@ -5229,7 +5229,8 @@ final class MenuBar: NSObject, NSMenuDelegate {
             return total + ((row["cost"] as? NSNumber)?.doubleValue ?? 0)   // shortcut: legacy states use creation day; exact daily counters start with this version
         }
         let lower = rows.contains { $0["usd"] is NSNull } ? "≥" : ""
-        return "Today: \(lower)\(String(format: "$%.2f", askUSD + agentUSD)) · asks \(String(format: "$%.2f", askUSD)) · agents \(String(format: "$%.2f", agentUSD))"
+        let money: (Double) -> String = { String(format: "$%.2f", $0).replacingOccurrences(of: ".", with: ",") }
+        return "Hoje: \(lower)\(money(askUSD + agentUSD)) · perguntas \(money(askUSD)) · agentes \(money(agentUSD))"
     }
     @objc func toggleMeeting() { meeting.running ? meeting.stop() : meeting.open() }
     @objc func ask() { if meeting.running { return meeting.focus() }; app.clickTalk = true; app.start(); if !app.engine.isRunning { app.clickTalk = false } }   // the same box as the shortcut, like its mic button
